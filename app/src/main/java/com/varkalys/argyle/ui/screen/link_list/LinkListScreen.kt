@@ -17,17 +17,20 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.varkalys.argyle.R
 import com.varkalys.argyle.model.local.Link
+import com.varkalys.argyle.ui.component.screen.Screen
 import com.varkalys.argyle.ui.theme.AppTheme
 
 @Composable
 fun LinkListScreen(viewModel: LinkListViewModel = hiltViewModel()) {
-    LinkListScreenContent(
-        searchQuery = viewModel.searchQuery.collectAsState().value,
-        onSearchQueryChange = viewModel::onSearchQueryChange,
-        onClearQueryClick = viewModel::onSearchQueryClear,
-        loading = viewModel.loading.collectAsState().value,
-        links = viewModel.links.collectAsState().value
-    )
+    Screen(viewModel = viewModel) {
+        LinkListScreenContent(
+            searchQuery = viewModel.searchQuery.collectAsState().value,
+            onSearchQueryChange = viewModel::onSearchQueryChange,
+            onClearQueryClick = viewModel::onSearchQueryClear,
+            loading = viewModel.loading.collectAsState().value,
+            links = viewModel.links.collectAsState().value
+        )
+    }
 }
 
 @Composable
