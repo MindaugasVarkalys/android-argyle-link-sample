@@ -8,11 +8,15 @@ class LinkRepository @Inject constructor(
     private val api: ApiService
 ) {
 
-    suspend fun getLinks(query: String): List<Link> = api.getSubscriptionPlans(query).map {
-        Link(
-            logoUrl = it.logoUrl,
-            name = it.name,
-            kind = it.kind
-        )
+    suspend fun getLinks(query: String): List<Link> {
+        return api.getLinks(query.ifEmpty { null })
+            .results.map {
+                Link(
+                    id = it.id,
+                    logoUrl = it.logoUrl,
+                    name = it.name,
+                    kind = it.kind.replaceFirstChar { char -> char.titlecase() }
+                )
+            }
     }
 }

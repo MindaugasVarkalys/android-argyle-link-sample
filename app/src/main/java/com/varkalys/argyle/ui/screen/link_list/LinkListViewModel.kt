@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LinkListViewModel @Inject constructor(
     private val linkRepository: LinkRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading as StateFlow<Boolean>
@@ -24,10 +24,29 @@ class LinkListViewModel @Inject constructor(
     private val _links = MutableStateFlow<List<Link>>(emptyList())
     val links = _links as StateFlow<List<Link>>
 
+    init {
+        queryResults()
+    }
+
     fun onSearchQueryChange(query: String) {
-        _searchQuery.value = query.trim()
-        if (query.length >= 2) {
-            queryResults()
+        _searchQuery.value = query
+        if (query.trim().length == 1) {
+            _links.value = emptyList()
+            return
+        }
+        queryResults()
+    }
+
+    private fun queryResults() {
+        val query = _searchQuery.value.trim()
+        _loading.value = true
+        viewModelScope.launch {
+            val results = linkRepository.getLinks(query)
+            if (query != _searchQuery.value.trim()) {  // Query changed during request, so ignore results
+                return@launch
+            }
+            _links.value = results
+            _loading.value = false
         }
     }
 
@@ -37,18 +56,5 @@ class LinkListViewModel @Inject constructor(
         }
         _searchQuery.value = ""
         queryResults()
-    }
-
-    private fun queryResults() {
-        val query = _searchQuery.value
-        _loading.value = true
-        viewModelScope.launch {
-            val results = linkRepository.getLinks(query)
-            if (query != _searchQuery.value) {  // Query changed during request, so ignore results
-                return@launch
-            }
-            _links.value = results
-            _loading.value = false
-        }
     }
 }
