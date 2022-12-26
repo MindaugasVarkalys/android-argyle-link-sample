@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,35 +45,36 @@ private fun LinkListScreenContent(
     Column {
         OutlinedTextField(
             modifier = Modifier
+                .testTag("query")
                 .fillMaxWidth()
                 .padding(16.dp),
             value = searchQuery,
             onValueChange = onSearchQueryChange,
             trailingIcon = {
-                IconButton(onClick = onClearQueryClick) {
+                IconButton(
+                    modifier = Modifier.testTag("clear"),
+                    onClick = onClearQueryClick
+                ) {
                     Icon(Icons.Default.Clear, contentDescription = null)
                 }
             },
         )
         when {
-            loading ->
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
+            loading -> Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            links.isNotEmpty() -> LazyColumn {
+                items(links, key = { it.id }) {
+                    LinkListItem(link = it)
                 }
-            links.isEmpty() -> Text(
+            }
+            else -> Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.no_results),
+                text = stringResource(id = if (searchQuery.trim().length == 1) R.string.enter_at_least_two_chars else R.string.no_results),
                 textAlign = TextAlign.Center
             )
-            else ->
-                LazyColumn {
-                    items(links, key = { it.id }) {
-                        LinkListItem(link = it)
-                    }
-                }
         }
     }
 }

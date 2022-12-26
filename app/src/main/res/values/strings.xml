@@ -2,6 +2,8 @@
     <string name="app_name">ArgyleLinkSample</string>
 
     <string name="no_results">No results</string>
+    <string name="enter_at_least_two_chars">Enter at least two characters to filter</string>
+
     <string name="category_employer">Employer</string>
     <string name="category_gig_platform">Gig platform</string>
     <string name="category_payroll_platform">Payroll platform</string>
