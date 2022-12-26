@@ -14,5 +14,6 @@ data class LinkItemsResponse(
     companion object {
         const val KIND_EMPLOYER = "employer"
         const val KIND_GIG_PLATFORM = "gig"
+        const val KIND_PAYROLL_PLATFORM = "platform"
     }
 }
