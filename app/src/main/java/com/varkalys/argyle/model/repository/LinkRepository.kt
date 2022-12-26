@@ -2,6 +2,7 @@ package com.varkalys.argyle.model.repository
 
 import com.varkalys.argyle.model.local.Link
 import com.varkalys.argyle.model.remote.ApiService
+import com.varkalys.argyle.model.remote.response.LinkItemsResponse
 import javax.inject.Inject
 
 class LinkRepository @Inject constructor(
@@ -15,7 +16,11 @@ class LinkRepository @Inject constructor(
                     id = it.id,
                     logoUrl = it.logoUrl,
                     name = it.name,
-                    kind = it.kind.replaceFirstChar { char -> char.titlecase() }
+                    category = when (it.kind) {
+                        LinkItemsResponse.KIND_EMPLOYER -> Link.Category.EMPLOYER
+                        LinkItemsResponse.KIND_GIG_PLATFORM -> Link.Category.GIG_PLATFORM
+                        else -> Link.Category.PAYROLL_PLATFORM
+                    }
                 )
             }
     }

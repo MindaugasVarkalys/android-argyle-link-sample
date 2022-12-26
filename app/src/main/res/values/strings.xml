@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">ArgyleLinkSample</string>
+
     <string name="no_results">No results</string>
+    <string name="category_employer">Employer</string>
+    <string name="category_gig_platform">Gig platform</string>
+    <string name="category_payroll_platform">Payroll platform</string>
+
     <string name="error_check_connection">Check your internet connection.</string>
     <string name="error_server">Our server encountered an issue. Please try again.</string>
 </resources>
